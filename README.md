@@ -23,16 +23,14 @@ Each bussiness feature package is divided into 4 separate layers which are:
 - Repository
 - Controller
  
- Packages can only talk to each other through service layer.
+Packages can only talk to each other through service layer.
+There are files corresponding to the layers. The implemntation of these layers, are located in a special file(e.g. adhock discount).
 
- Some pacakges which do not correspond to bussiness features(internal services), are not following the above 4-layering rule to keep the code simple. 
+Some pacakges which do not correspond to bussiness features(internal services), are not following the above 4-layering rule to keep the code simple. 
 ## Tests
 Some test cases were added as simple test cases to demonstrate unit testing and integration testing.
 The test cases are by no mean exhaustive. 
 Current code coverage for discount package is: **50%**
-
-## Run
-Currently running the application is only possible through test, because much of the necessary codes are just dummy implementations.
 
 ## Time Spent
 **Total** ~ 20h
