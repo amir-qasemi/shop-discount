@@ -33,9 +33,9 @@ func (s *AdHocDiscountService) Apply(cart *cart.Cart, discountCode string, user 
 		return err
 	}
 
-	s.DiscountRepository.Save(discount)
+	err = s.DiscountRepository.Save(discount)
 
-	return nil
+	return err
 }
 
 func (s *AdHocDiscountService) IsEligible(cart *cart.Cart, discountCode string, user *user.User) bool {
@@ -67,9 +67,9 @@ func (s *AdHocDiscountService) RollbackUsage(usageId string, discountCode string
 	}
 
 	delete(addhocDiscount.Usages(), usageId)
-	s.DiscountRepository.Save(discount)
+	err = s.DiscountRepository.Save(discount)
 
-	return nil
+	return err
 }
 
 func (s *AdHocDiscountService) Save(discount Discount) error {
