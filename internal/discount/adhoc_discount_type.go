@@ -4,20 +4,27 @@ import (
 	"github.com/amir-qasemi/shop-discount/internal/product"
 )
 
+// All the discount policies
+
+// NewUserDiscount the discount which should be only applied to new users without any previous order
 type NewUserDiscount struct {
 	generalAdhocDiscount
 }
 
+// ProductDiscount the discount which is satisfied when a specific product exists in user's cart
 type ProductDiscount struct {
 	generalAdhocDiscount
 	Product product.Product
 }
 
+// MinProductDiscount the discount which is satisfied when minimum number of a specific product exists in user's cart
 type MinProductDiscount struct {
 	generalAdhocDiscount
 	Product   product.Product
 	MinNumber int
 }
+
+// Implementation of AdhockDiscount for discount policies
 
 func (d *NewUserDiscount) Apply(req discountReqWrapper) error {
 	return d.checkAndApply(req, true)

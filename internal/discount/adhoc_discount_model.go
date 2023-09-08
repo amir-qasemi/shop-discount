@@ -1,3 +1,4 @@
+// Discount
 package discount
 
 import (
@@ -11,6 +12,7 @@ import (
 	"github.com/amir-qasemi/shop-discount/internal/util"
 )
 
+// AdHocDiscount the interface which should be implemeted by each new discounting policy
 type AdHocDiscount interface {
 	Discount
 	Apply(discountReqWrapper) error
@@ -18,12 +20,15 @@ type AdHocDiscount interface {
 	Usages() map[string]Usage
 }
 
+// discountReqWrapper a wrapper to easily add more fields needed for cheking and applying discount without changing all the policies.
 type discountReqWrapper struct {
 	cart         *cart.Cart
 	user         *user.User
 	orderService order.Service
 }
 
+// generalAdhocDiscount a struct that contains field shared by all of the discounting policies.
+// This struct can be embeded in new policies.
 type generalAdhocDiscount struct {
 	DiscountCode string
 	CreationTs   time.Time
@@ -55,6 +60,7 @@ func (d *generalAdhocDiscount) canUse() bool {
 	return (len(d.XUsages) < d.ValidNum) || d.ValidNum == -1
 }
 
+// validateReq validates whether this discount can be used or not
 func (d *generalAdhocDiscount) validateReq(req discountReqWrapper) error {
 	if len(req.cart.Lines) < 1 {
 		return errors.New("Discount cannot be applied on empty cart")
@@ -67,6 +73,7 @@ func (d *generalAdhocDiscount) validateReq(req discountReqWrapper) error {
 	return nil
 }
 
+// applyToLine reduce the appropriate amount from the final price.
 func (d *generalAdhocDiscount) applyToLine(l *cart.Line) error {
 	if d.XUnit == Absoulute {
 		l.PriceAfterDiscount = l.Product.Price*l.Num - d.Value()

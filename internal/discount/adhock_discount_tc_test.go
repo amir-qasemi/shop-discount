@@ -8,6 +8,7 @@ import (
 	"github.com/amir-qasemi/shop-discount/internal/product"
 )
 
+// All the test cases are defined here to be reused accros different tests
 type DiscountTestCase struct {
 	discountUnderTest AdHocDiscount
 	prevOrders        []order.Order

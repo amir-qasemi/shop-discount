@@ -11,7 +11,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// Controller the controller for discount
+// Codes related to REST API for discount service(Could be easily replaced by gRPC endpoints or ...)
+// Some structures like context(which should be absolutly present) are ommitted by choice to keep the code more simple and readable
+
+// Controller for discount
 type Controller struct {
 	service     Service
 	cartService cart.Service
