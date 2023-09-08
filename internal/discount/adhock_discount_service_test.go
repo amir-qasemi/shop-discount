@@ -10,6 +10,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
+// tests for AdhocDiscountService
 func TestAdhocDiscountService(t *testing.T) {
 	mockedRepository := new(MockedRepository)
 	mockedOrderService := new(MockedOrderService)

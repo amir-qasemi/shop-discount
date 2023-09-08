@@ -4,6 +4,7 @@ import (
 	"database/sql"
 )
 
+// Repository the interface for persistence layer for discounts
 type Repository interface {
 	GetDiscountByCode(string) (Discount, error)
 	GetDiscountByUsageId(string) (Discount, error)

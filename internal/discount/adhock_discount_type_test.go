@@ -11,6 +11,8 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
+// Tests for different discounting policies
+
 func TestAdhockDiscountTypes(t *testing.T) {
 	mockedOrderSrv := new(MockedOrderService)
 

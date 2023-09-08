@@ -10,10 +10,12 @@ import (
 	"github.com/amir-qasemi/shop-discount/internal/user"
 )
 
+// AdHocDiscountService a implemntation of discount service which uses a adhoc approach(see README.md)
+// The logic for evaluting whether a discount can be applied to a cart is embeded in the AdhocDiscount itself
 type AdHocDiscountService struct {
-	DiscountRepository Repository
-	OrderService       order.Service
-	LockStore          lock.LockStore
+	DiscountRepository Repository     // persistance layer for discounts
+	OrderService       order.Service  // a service used for retrieving orders of user
+	LockStore          lock.LockStore // a lock manager. If a TXN is choosed(with serializable isolation level), this store can be ommited.
 }
 
 func (s *AdHocDiscountService) Apply(cart *cart.Cart, discountCode string, user *user.User) error {
