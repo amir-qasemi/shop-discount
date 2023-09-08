@@ -1,13 +1,16 @@
 package config
 
 import (
-	"gopkg.in/yaml.v3"
+	"errors"
 	"log"
 	"os"
+
+	"gopkg.in/yaml.v3"
 )
 
 var config *Config
 
+// Config wrapper for all config related fields
 type Config struct {
 	ServerConfig ServerConfig `yaml:"server"`
 	DbConfig     DbConfig     `yaml:"db"`
@@ -15,11 +18,13 @@ type Config struct {
 	initialized bool
 }
 
+// ServerConfig all the configs related to server
 type ServerConfig struct {
 	Host string `yaml:"host"`
 	Port string `yaml:"port"`
 }
 
+// DbConfig all the configs related to db
 type DbConfig struct {
 	Host     string `yaml:"host"`
 	Port     int    `yaml:"port"`
@@ -28,14 +33,18 @@ type DbConfig struct {
 	DbName   string `yaml:"dbName"`
 }
 
+// GetConfig returns the global config(a singleton).
+// If config is not already initilized with New, an error will be returnd
 func GetConfig() (*Config, error) {
 	if !config.initialized {
-		//log.P("Config is not initialized!")
+		return nil, errors.New("Config not inited. Call New first")
 	}
 
 	return config, nil
 }
 
+// New Builds a config object from the given path.
+// The given file should be yaml file with the structure defined in Config
 func New(configFilePath string) (*Config, error) {
 	f, err := os.Open(configFilePath)
 	if err != nil {
