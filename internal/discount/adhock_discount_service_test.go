@@ -2,7 +2,6 @@ package discount
 
 import (
 	"fmt"
-	"sync"
 	"testing"
 
 	"github.com/amir-qasemi/shop-discount/internal/user"
@@ -20,7 +19,8 @@ func TestAdhocDiscountService(t *testing.T) {
 	mockedRepository.On("Save", mock.Anything).Return(nil)
 	orderMockCall := mockedOrderService.On("GetUserOrders", mock.Anything).Return(nil, nil)
 
-	mockedLockStore.On("Lock", mock.Anything).Return(&sync.RWMutex{})
+	mockedLockStore.On("Lock", mock.Anything).Return(nil)
+	mockedLockStore.On("Unlock", mock.Anything).Return(nil)
 
 	sut := AdHocDiscountService{
 		DiscountRepository: mockedRepository,

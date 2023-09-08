@@ -19,9 +19,9 @@ type AdHocDiscountService struct {
 }
 
 func (s *AdHocDiscountService) Apply(cart *cart.Cart, discountCode string, user *user.User) error {
-	l := s.LockStore.Lock(discountLockKey(discountCode))
-	l.Lock()
-	defer l.Unlock()
+	s.LockStore.Lock(discountLockKey(discountCode))
+	defer s.LockStore.Unlock(discountLockKey(discountCode))
+
 	discount, err := s.DiscountRepository.GetDiscountByCode(discountCode)
 	if err != nil {
 		return err
@@ -39,9 +39,8 @@ func (s *AdHocDiscountService) Apply(cart *cart.Cart, discountCode string, user 
 }
 
 func (s *AdHocDiscountService) IsEligible(cart *cart.Cart, discountCode string, user *user.User) bool {
-	l := s.LockStore.Lock(discountLockKey(discountCode))
-	l.Lock()
-	defer l.Unlock()
+	s.LockStore.Lock(discountLockKey(discountCode))
+	defer s.LockStore.Unlock(discountLockKey(discountCode))
 
 	discount, err := s.DiscountRepository.GetDiscountByCode(discountCode)
 	if err != nil {
@@ -54,9 +53,8 @@ func (s *AdHocDiscountService) IsEligible(cart *cart.Cart, discountCode string, 
 }
 
 func (s *AdHocDiscountService) RollbackUsage(usageId string, discountCode string) error {
-	l := s.LockStore.Lock(discountLockKey(discountCode))
-	l.Lock()
-	defer l.Unlock()
+	s.LockStore.Lock(discountLockKey(discountCode))
+	defer s.LockStore.Unlock(discountLockKey(discountCode))
 
 	discount, err := s.DiscountRepository.GetDiscountByUsageId(usageId)
 	if discount.Code() != discountCode {

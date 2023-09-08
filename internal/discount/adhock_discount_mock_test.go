@@ -1,8 +1,6 @@
 package discount
 
 import (
-	"sync"
-
 	"github.com/amir-qasemi/shop-discount/internal/cart"
 	"github.com/amir-qasemi/shop-discount/internal/order"
 	"github.com/amir-qasemi/shop-discount/internal/product"
@@ -77,9 +75,14 @@ type MockedLockStore struct {
 	mock.Mock
 }
 
-func (l *MockedLockStore) Lock(key string) *sync.RWMutex {
+func (l *MockedLockStore) Lock(key string) error {
 	args := l.Called(key)
-	return args.Get(0).(*sync.RWMutex)
+	return args.Error(0)
+}
+
+func (l *MockedLockStore) Unlock(key string) error {
+	args := l.Called(key)
+	return args.Error(0)
 }
 
 type MockedOrderService struct {

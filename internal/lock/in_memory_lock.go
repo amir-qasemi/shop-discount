@@ -1,6 +1,9 @@
 package lock
 
-import "sync"
+import (
+	"errors"
+	"sync"
+)
 
 // inMemLockStore a implementation that keeps the locks in memory.
 // No house cleaning is done. So this implementation suffers from inbounded memeory growth
@@ -10,16 +13,29 @@ type inMemLockStore struct {
 	mapLock sync.Mutex
 }
 
-func (l *inMemLockStore) Lock(key string) *sync.RWMutex {
+func (l *inMemLockStore) Lock(key string) error {
 	l.mapLock.Lock()
-	defer l.mapLock.Unlock()
-
 	lock, ok := l.locks[key]
 	if !ok {
 		lock = &sync.RWMutex{}
 		l.locks[key] = lock
 	}
-	return lock
+	l.mapLock.Unlock()
+
+	lock.Lock()
+	return nil
+}
+
+func (l *inMemLockStore) Unlock(key string) error {
+	l.mapLock.Lock()
+	lock, ok := l.locks[key]
+	l.mapLock.Unlock()
+	if !ok {
+		return errors.New("Lock")
+	}
+
+	lock.Unlock()
+	return nil
 }
 
 // NewInMemLockStore returns new a lock store implemented in memory
